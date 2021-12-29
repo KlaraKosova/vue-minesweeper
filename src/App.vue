@@ -1,17 +1,22 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <Navbar />
+    <FieldContainer />
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Navbar from './components/Navbar'
+import FieldContainer from './components/FieldContainer'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    FieldContainer,
+    Navbar
+  },
+  created () {
+    this.$store.commit('generateMatrix', { rows: 10, columns: 10, mines: 50 })
   }
 }
 </script>
