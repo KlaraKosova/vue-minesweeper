@@ -8,8 +8,8 @@ export class Matrix {
   #matrix;
   /**
    * Initializes matrix with empty fields
-   * @param {Number} rows
-   * @param {Number} columns
+   * @param {Number} rows number of rows
+   * @param {Number} columns number of columns
    */
   constructor (rows, columns) {
     this.rows = rows
@@ -23,10 +23,13 @@ export class Matrix {
       }
       this.#matrix.push(tmpRowArray)
     }
-
-    // console.log(this.#matrix)
   }
 
+  /**
+   * Fills the matrix with mines and corresponding neighbour fields numbers
+   * @param {Number} mines number of mines to be generated
+   * @return void
+   */
   generateMines (mines) {
     const mineSequences = []
     for (let i = 0; i < mines; i++) {
@@ -47,20 +50,21 @@ export class Matrix {
       // TODO: refactor
       // increment fields around mine
       if (row !== 0) {
-        if (col !== 0) {
+        if (col !== 0) { // top left corner
           if (this.#matrix[row - 1][col - 1] instanceof EmptyField) {
             this.#matrix[row - 1][col - 1] = new NumberField()
           } else if (this.#matrix[row - 1][col - 1] instanceof NumberField) {
             this.#matrix[row - 1][col - 1].increment()
           }
         }
-        if (col !== this.columns - 1) {
+        if (col !== this.columns - 1) { // top right corner
           if (this.#matrix[row - 1][col + 1] instanceof EmptyField) {
             this.#matrix[row - 1][col + 1] = new NumberField()
           } else if (this.#matrix[row - 1][col + 1] instanceof NumberField) {
             this.#matrix[row - 1][col + 1].increment()
           }
         }
+        // top and directly above
         if (this.#matrix[row - 1][col] instanceof EmptyField) {
           this.#matrix[row - 1][col] = new NumberField()
         } else if (this.#matrix[row - 1][col] instanceof NumberField) {
@@ -69,34 +73,35 @@ export class Matrix {
       }
 
       if (row !== this.rows - 1) {
-        if (col !== 0) {
+        if (col !== 0) { // bottom left corner
           if (this.#matrix[row + 1][col - 1] instanceof EmptyField) {
             this.#matrix[row + 1][col - 1] = new NumberField()
           } else if (this.#matrix[row + 1][col - 1] instanceof NumberField) {
             this.#matrix[row + 1][col - 1].increment()
           }
         }
-        if (col !== this.columns - 1) {
+        if (col !== this.columns - 1) { // bottom right corner
           if (this.#matrix[row + 1][col + 1] instanceof EmptyField) {
             this.#matrix[row + 1][col + 1] = new NumberField()
           } else if (this.#matrix[row + 1][col + 1] instanceof NumberField) {
             this.#matrix[row + 1][col + 1].increment()
           }
         }
+        // bottom and directly below
         if (this.#matrix[row + 1][col] instanceof EmptyField) {
           this.#matrix[row + 1][col] = new NumberField()
         } else if (this.#matrix[row + 1][col] instanceof NumberField) {
           this.#matrix[row + 1][col].increment()
         }
       }
-      if (col !== 0) {
+      if (col !== 0) { // same row, left
         if (this.#matrix[row][col - 1] instanceof EmptyField) {
           this.#matrix[row][col - 1] = new NumberField()
         } else if (this.#matrix[row][col - 1] instanceof NumberField) {
           this.#matrix[row][col - 1].increment()
         }
       }
-      if (col !== this.columns - 1) {
+      if (col !== this.columns - 1) { // same row, right
         if (this.#matrix[row][col + 1] instanceof EmptyField) {
           this.#matrix[row][col + 1] = new NumberField()
         } else if (this.#matrix[row][col + 1] instanceof NumberField) {
@@ -106,11 +111,25 @@ export class Matrix {
     })
   }
 
+  /**
+   * Returns specific field based on provided coordinates
+   * @param {Object} coordinates
+   * @param {Number} coordinates.x
+   * @param {Number} coordinates.y
+   * @return {Field}
+   */
   getFieldByCoordinates ({ x, y }) {
     return this.#matrix[x][y]
   }
 
-  logMatrix () {
+  /**
+   * Returns the matrix in string format
+   * Rows are separated by '\n', columns by ' '
+   * !!! Each field has space next to it !!!
+   * Mines are represented by 'x', empty fields by '-'
+   * @return {String} matrix
+   */
+  getStringifiedMatrix () {
     let str = ''
     for (let i = 0; i < this.rows; i++) {
       for (let j = 0; j < this.columns; j++) {
@@ -120,6 +139,6 @@ export class Matrix {
       str += '\n'
     }
 
-    console.log(str)
+    return str
   }
 }

@@ -1,6 +1,7 @@
 import Vuex from 'vuex'
 import Vue from 'vue'
-import { mutations } from 'mutations.js'
+import { mutations } from './mutations.js'
+import { getters } from '@/store/getters'
 Vue.use(Vuex)
 
 export const store = new Vuex.Store({
@@ -12,13 +13,6 @@ export const store = new Vuex.Store({
   state: {
     matrix: {}
   },
-  getters: {
-    /**
-     * @return {function({ x: Number, y: Number}): Field}
-     */
-    field (state) {
-      return (coordinates) => state.matrix.getFieldByCoordinates(coordinates)
-    }
-  },
+  getters,
   mutations
 })

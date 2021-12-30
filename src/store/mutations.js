@@ -13,8 +13,6 @@ export const mutations = {
   generateMatrix (state, { rows, columns, mines }) {
     // reset matrix
     state.matrix = new Matrix(rows, columns)
-
     state.matrix.generateMines(mines)
-    state.matrix.logMatrix()
   }
 }
