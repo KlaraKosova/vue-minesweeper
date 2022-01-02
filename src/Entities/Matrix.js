@@ -116,10 +116,23 @@ export class Matrix {
    * @param {Object} coordinates
    * @param {Number} coordinates.x
    * @param {Number} coordinates.y
-   * @return {Field}
+   * @return {Object}
    */
   getFieldByCoordinates ({ x, y }) {
-    return this.#matrix[x][y]
+    return { ...this.#matrix[x][y] }
+  }
+
+  /**
+   * Show field based on coordinates
+   * // TODO: game over on mine
+   * // TODO: fields around empty
+   * @param {Object} coordinates
+   * @param {Number} coordinates.x
+   * @param {Number} coordinates.y
+   * @return {void}
+   */
+  showField ({ x, y }) {
+    this.#matrix[x][y].show()
   }
 
   /**

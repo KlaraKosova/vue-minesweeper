@@ -1,7 +1,7 @@
 <template>
   <div class="field-container">
     <div v-for="i in $store.state.matrix.rows" :key="i" class="field-row">
-      <Field v-for=" j in $store.state.matrix.columns" :key="j" :x="i" :y="j"/>
+      <Field v-for=" j in $store.state.matrix.columns" :key="j" :x="i-1" :y="j-1"/>
     </div>
   </div>
 </template>

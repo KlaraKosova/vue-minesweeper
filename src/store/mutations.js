@@ -2,7 +2,7 @@ import { Matrix } from '../Entities/Matrix'
 
 export const mutations = {
   /**
-   * Generates game field according to provided settings
+   * Generates game field based on provided settings
    * @param {VuexState} state
    * @param {Object} options
    * @param {Number} options.rows Number of rows
@@ -14,5 +14,17 @@ export const mutations = {
     // reset matrix
     state.matrix = new Matrix(rows, columns)
     state.matrix.generateMines(mines)
+  },
+
+  /**
+   * Propagates to matrix
+   * @param {VuexState} state
+   * @param {Object} coordinates
+   * @param {Number} coordinates.x
+   * @param {Number} coordinates.y
+   * @return {void}
+   */
+  showField (state, { x, y }) {
+    state.matrix.showField({ x, y })
   }
 }
