@@ -16,7 +16,7 @@ export default {
     Navbar
   },
   created () {
-    this.$store.commit('generateMatrix', { rows: 10, columns: 10, mines: 50 })
+    this.$store.commit('generateMatrix', { rows: 10, columns: 10, mines: 20 })
   }
 }
 </script>

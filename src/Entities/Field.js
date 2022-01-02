@@ -7,4 +7,12 @@ export class Field {
     this.hidden = true
     this.value = null
   }
+
+  /**
+   * Changes the 'hidden' attribute to false
+   * @return void
+   */
+  show () {
+    this.hidden = false
+  }
 }

@@ -1,11 +1,13 @@
 <template>
-<div class="field-container">
-  {{field({ x: this.x - 1, y: this.y - 1 }).value}}
+<div class="field-container" @click="showHidden">
+  <div class="field-container-inner hidden" v-if="field.hidden"></div>
+  <div v-else>
+    {{field.value}}
+  </div>
 </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 
 export default {
   name: 'Field',
@@ -19,23 +21,49 @@ export default {
       required: true
     }
   },
-  computed: {
-    ...mapGetters({
-      field: 'field'
-    })
+  data () {
+    return {
+      field: {}
+    }
+  },
+  methods: {
+    showHidden () {
+      if (this.field.hidden) {
+        this.$store.commit('showField', { x: this.x, y: this.y })
+      }
+    }
+  },
+  created () {
+    this.field = this.$store.getters.field({ x: this.x, y: this.y })
   }
 }
 </script>
 
 <style scoped>
+/*
+TODO: responsive sizes
+ */
 .field-container {
   padding: 1px;
-  border: #000 solid;
   display: flex;
   justify-content: center;
   align-items: center;
   /* testing */
   width: 50px;
   height: 50px;
+}
+.field-container-inner {
+  width: 100%;
+  height: 100%;
+}
+.hidden {
+  border-style: solid;
+  border-width: 4px;
+  border-top-color: white;
+  border-left-color: white;
+  border-right-color: #808080;
+  border-bottom-color: #808080;
+  background-color: #bfbfbf;
+  /* border: 4px outset #bfbfbf; */
 }
 </style>
