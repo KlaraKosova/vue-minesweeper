@@ -119,7 +119,7 @@ export class Matrix {
    * @return {Object}
    */
   getFieldByCoordinates ({ x, y }) {
-    return { ...this.#matrix[x][y] }
+    return this.#matrix[x][y]
   }
 
   /**

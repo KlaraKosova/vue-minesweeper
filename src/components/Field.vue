@@ -30,7 +30,6 @@ export default {
     showHidden () {
       if (this.field.hidden) {
         this.$store.commit('showField', { x: this.x, y: this.y })
-        this.$forceUpdate()
       }
     }
   },

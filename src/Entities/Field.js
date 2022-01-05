@@ -10,6 +10,7 @@ export class Field {
 
   /**
    * Changes the 'hidden' attribute to false
+   * !!! Should be called only from Matrix (except for function mocks in tests)
    * @return void
    */
   show () {
