@@ -19,7 +19,7 @@ export class Matrix {
     for (let i = 0; i < rows; i++) {
       const tmpRowArray = []
       for (let j = 0; j < columns; j++) {
-        tmpRowArray.push(new EmptyField())
+        tmpRowArray.push(new EmptyField({ x: i, y: j }))
       }
       this.#matrix.push(tmpRowArray)
     }
@@ -45,28 +45,28 @@ export class Matrix {
     mineSequences.forEach((sequence) => {
       const row = Math.floor(sequence / this.rows)
       const col = sequence % this.rows
-      this.#matrix[row][col] = new Mine()
+      this.#matrix[row][col] = new Mine({ x: row, y: col })
 
       // TODO: refactor
       // increment fields around mine
       if (row !== 0) {
         if (col !== 0) { // top left corner
           if (this.#matrix[row - 1][col - 1] instanceof EmptyField) {
-            this.#matrix[row - 1][col - 1] = new NumberField()
+            this.#matrix[row - 1][col - 1] = new NumberField({ x: row - 1, y: col - 1 })
           } else if (this.#matrix[row - 1][col - 1] instanceof NumberField) {
             this.#matrix[row - 1][col - 1].increment()
           }
         }
         if (col !== this.columns - 1) { // top right corner
           if (this.#matrix[row - 1][col + 1] instanceof EmptyField) {
-            this.#matrix[row - 1][col + 1] = new NumberField()
+            this.#matrix[row - 1][col + 1] = new NumberField({ x: row - 1, y: col + 1 })
           } else if (this.#matrix[row - 1][col + 1] instanceof NumberField) {
             this.#matrix[row - 1][col + 1].increment()
           }
         }
         // top and directly above
         if (this.#matrix[row - 1][col] instanceof EmptyField) {
-          this.#matrix[row - 1][col] = new NumberField()
+          this.#matrix[row - 1][col] = new NumberField({ x: row - 1, y: col })
         } else if (this.#matrix[row - 1][col] instanceof NumberField) {
           this.#matrix[row - 1][col].increment()
         }
@@ -75,35 +75,35 @@ export class Matrix {
       if (row !== this.rows - 1) {
         if (col !== 0) { // bottom left corner
           if (this.#matrix[row + 1][col - 1] instanceof EmptyField) {
-            this.#matrix[row + 1][col - 1] = new NumberField()
+            this.#matrix[row + 1][col - 1] = new NumberField({ x: row + 1, y: col - 1 })
           } else if (this.#matrix[row + 1][col - 1] instanceof NumberField) {
             this.#matrix[row + 1][col - 1].increment()
           }
         }
         if (col !== this.columns - 1) { // bottom right corner
           if (this.#matrix[row + 1][col + 1] instanceof EmptyField) {
-            this.#matrix[row + 1][col + 1] = new NumberField()
+            this.#matrix[row + 1][col + 1] = new NumberField({ x: row + 1, y: col + 1 })
           } else if (this.#matrix[row + 1][col + 1] instanceof NumberField) {
             this.#matrix[row + 1][col + 1].increment()
           }
         }
         // bottom and directly below
         if (this.#matrix[row + 1][col] instanceof EmptyField) {
-          this.#matrix[row + 1][col] = new NumberField()
+          this.#matrix[row + 1][col] = new NumberField({ x: row + 1, y: col })
         } else if (this.#matrix[row + 1][col] instanceof NumberField) {
           this.#matrix[row + 1][col].increment()
         }
       }
       if (col !== 0) { // same row, left
         if (this.#matrix[row][col - 1] instanceof EmptyField) {
-          this.#matrix[row][col - 1] = new NumberField()
+          this.#matrix[row][col - 1] = new NumberField({ x: row, y: col - 1 })
         } else if (this.#matrix[row][col - 1] instanceof NumberField) {
           this.#matrix[row][col - 1].increment()
         }
       }
       if (col !== this.columns - 1) { // same row, right
         if (this.#matrix[row][col + 1] instanceof EmptyField) {
-          this.#matrix[row][col + 1] = new NumberField()
+          this.#matrix[row][col + 1] = new NumberField({ x: row, y: col + 1 })
         } else if (this.#matrix[row][col + 1] instanceof NumberField) {
           this.#matrix[row][col + 1].increment()
         }
@@ -124,6 +124,7 @@ export class Matrix {
 
   /**
    * Show field based on coordinates
+   * if user clicks on EmptyField, the whole area of EmptyFields is revealed
    * // TODO: game over on mine
    * // TODO: fields around empty
    * @param {Object} coordinates
@@ -132,7 +133,71 @@ export class Matrix {
    * @return {void}
    */
   showField ({ x, y }) {
-    this.#matrix[x][y].show()
+    // if clicked on EmptyField, look around the field for another EmptyFields and reveal them as well
+    // then look around found for each of that fields
+    // if clicked on non-empty field, the loop ends after one iteration
+
+    // stack for keeping fields that have been found, but not inspected for potential neighbouring EmptyFields
+    const found = []
+    // store for fields that have been inspected
+    const processed = []
+    // conditional pushing to the found stack
+    function process (field) {
+      if (!processed.includes(field)) {
+        found.push(field)
+      }
+    }
+    // start with the field user clicked on
+    found.push(this.#matrix[x][y])
+
+    while (found.length) {
+      const current = found.pop()
+      const coordinates = current.getCoordinates()
+      current.show()
+      processed.push(current)
+
+      // looking around only EmptyFields
+      if (!(current instanceof EmptyField)) {
+        continue
+      }
+      // TODO: refactor
+      // cycle around field
+      if (coordinates.x !== 0) {
+        if (coordinates.y !== 0) {
+          const topLeft = this.#matrix[coordinates.x - 1][coordinates.y - 1]
+          process(topLeft)
+        }
+        if (coordinates.y !== this.columns - 1) {
+          const topRight = this.#matrix[coordinates.x - 1][coordinates.y + 1]
+          process(topRight)
+        }
+
+        const above = this.#matrix[coordinates.x - 1][coordinates.y]
+        process(above)
+      }
+
+      if (coordinates.x !== this.rows - 1) {
+        if (coordinates.y !== 0) {
+          const bottomLeft = this.#matrix[coordinates.x + 1][coordinates.y - 1]
+          process(bottomLeft)
+        }
+        if (coordinates.y !== this.columns - 1) {
+          const bottomRight = this.#matrix[coordinates.x + 1][coordinates.y + 1]
+          process(bottomRight)
+        }
+
+        const below = this.#matrix[coordinates.x + 1][coordinates.y]
+        process(below)
+      }
+      if (coordinates.y !== 0) {
+        const left = this.#matrix[coordinates.x][coordinates.y - 1]
+        process(left)
+      }
+      if (coordinates.y !== this.columns - 1) {
+        const right = this.#matrix[coordinates.x][coordinates.y + 1]
+        process(right)
+      }
+    }
   }
 
   /**

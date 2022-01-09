@@ -29,4 +29,14 @@ describe('getters', () => {
       }
     }
   })
+  it('matrixDimensions', () => {
+    const state = {
+      matrix: {}
+    }
+    // generate matrix for testing
+    mutations.generateMatrix(state, { rows: 15, columns: 10, mines: 10 })
+
+    expect(getters.matrixDimensions(state).rows).toBe(15)
+    expect(getters.matrixDimensions(state).columns).toBe(10)
+  })
 })

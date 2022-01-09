@@ -1,8 +1,8 @@
 import { Field } from './Field'
 
 export class Mine extends Field {
-  constructor () {
-    super()
+  constructor ({ x, y }) {
+    super({ x, y })
     this.value = 'x'
   }
 }

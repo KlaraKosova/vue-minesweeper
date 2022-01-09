@@ -4,8 +4,8 @@ export class NumberField extends Field {
   /**
    * Initializes field with value 1
    */
-  constructor () {
-    super()
+  constructor ({ x, y }) {
+    super({ x, y })
     this.value = 1
   }
 
