@@ -201,6 +201,116 @@ export class Matrix {
   }
 
   /**
+   * @param {Object} coordinates
+   * @param {Number} coordinates.x
+   * @param {Number} coordinates.y
+   * @return {void}
+   */
+  tryRevealAround ({ x, y }) {
+    // conditional revealing to the found stack
+    const process = field => {
+      if (!field.flagged) {
+        this.showField({ x: field.getCoordinates().x, y: field.getCoordinates().y })
+      }
+    }
+    const field = this.#matrix[x][y]
+    let neighbourFlagCount = 0
+    // TODO: refactor
+    // search for flags
+    if (x !== 0) {
+      if (y !== 0) {
+        const topLeft = this.#matrix[x - 1][y - 1]
+        if (topLeft.flagged) {
+          ++neighbourFlagCount
+        }
+      }
+      if (y !== this.columns - 1) {
+        const topRight = this.#matrix[x - 1][y + 1]
+        if (topRight.flagged) {
+          ++neighbourFlagCount
+        }
+      }
+
+      const above = this.#matrix[x - 1][y]
+      if (above.flagged) {
+        ++neighbourFlagCount
+      }
+    }
+
+    if (x !== this.rows - 1) {
+      if (y !== 0) {
+        const bottomLeft = this.#matrix[x + 1][y - 1]
+        if (bottomLeft.flagged) {
+          ++neighbourFlagCount
+        }
+      }
+      if (y !== this.columns - 1) {
+        const bottomRight = this.#matrix[x + 1][y + 1]
+        if (bottomRight.flagged) {
+          ++neighbourFlagCount
+        }
+      }
+
+      const below = this.#matrix[x + 1][y]
+      if (below.flagged) {
+        ++neighbourFlagCount
+      }
+    }
+    if (y !== 0) {
+      const left = this.#matrix[x][y - 1]
+      if (left.flagged) {
+        ++neighbourFlagCount
+      }
+    }
+    if (y !== this.columns - 1) {
+      const right = this.#matrix[x][y + 1]
+      if (right.flagged) {
+        ++neighbourFlagCount
+      }
+    }
+    if (neighbourFlagCount !== field.value) {
+      return
+    }
+
+    // cycle around to reveal
+    if (x !== 0) {
+      if (y !== 0) {
+        const topLeft = this.#matrix[x - 1][y - 1]
+        process(topLeft)
+      }
+      if (y !== this.columns - 1) {
+        const topRight = this.#matrix[x - 1][y + 1]
+        process(topRight)
+      }
+
+      const above = this.#matrix[x - 1][y]
+      process(above)
+    }
+
+    if (x !== this.rows - 1) {
+      if (y !== 0) {
+        const bottomLeft = this.#matrix[x + 1][y - 1]
+        process(bottomLeft)
+      }
+      if (y !== this.columns - 1) {
+        const bottomRight = this.#matrix[x + 1][y + 1]
+        process(bottomRight)
+      }
+
+      const below = this.#matrix[x + 1][y]
+      process(below)
+    }
+    if (y !== 0) {
+      const left = this.#matrix[x][y - 1]
+      process(left)
+    }
+    if (y !== this.columns - 1) {
+      const right = this.#matrix[x][y + 1]
+      process(right)
+    }
+  }
+
+  /**
    * Returns the matrix in string format
    * Rows are separated by '\n', columns by ' '
    * !!! Each field has space next to it !!!

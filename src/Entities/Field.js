@@ -1,6 +1,7 @@
 export class Field {
   hidden;
   value;
+  flagged;
   #x;
   #y;
   /**
@@ -13,6 +14,7 @@ export class Field {
   constructor ({ x, y }) {
     this.hidden = true
     this.value = null
+    this.flagged = false
     this.#x = x
     this.#y = y
   }

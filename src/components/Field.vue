@@ -1,21 +1,33 @@
 <template>
-<div class="field-container"
-     :class="{'last-row': lastRow, 'last-column': lastColumn}"
-     @click="showHidden">
-  <div class="field-container-inner hidden" v-if="field.hidden"></div>
-  <div
+<div
+    class="field-container"
+    :class="{'hidden': field.hidden}"
+    @click="handleRightClick"
+    @contextmenu.prevent="handleLeftClick"
+>
+  <span
+      v-if="!field.hidden"
       :class="`number-field-${field.value}`"
-      v-else
   >
-    {{field.value}}
-  </div>
+    <template v-if="displaysMineIcon">
+      <MineSVG />
+    </template>
+    <template v-else>
+      {{field.value}}
+    </template>
+  </span>
+  <FlagSVG v-else-if="this.field.flagged" />
 </div>
 </template>
 
 <script>
+import { Mine } from '../Entities/Mine'
+import MineSVG from './MineSVG'
+import FlagSVG from './FlagSVG'
 
 export default {
   name: 'Field',
+  components: { FlagSVG, MineSVG },
   props: {
     x: {
       type: Number,
@@ -32,22 +44,29 @@ export default {
     }
   },
   computed: {
-    /**
-     * Styling purposes - preventing different border thickness for outer and inner edges
-     * @return {Boolean}
-     */
-    lastRow () {
-      return this.x === this.$store.getters.matrixDimensions.rows - 1
-    },
-    lastColumn () {
-      return this.y === this.$store.getters.matrixDimensions.columns - 1
+    displaysMineIcon () {
+      return this.field instanceof Mine
     }
   },
   methods: {
-    showHidden () {
-      if (this.field.hidden) {
+    handleRightClick () {
+      // reveal field if hidden and doesn't have flag
+      if (this.field.hidden && !this.field.flagged) {
         this.$store.commit('showField', { x: this.x, y: this.y })
+        return
       }
+      if (!this.field.hidden) {
+        // show fields around mine for revealed with and flagged neighbours
+        this.$store.commit('tryRevealAround', { x: this.x, y: this.y })
+      }
+    },
+    handleLeftClick () {
+      // toggle flag for hidden fields
+      if (this.field.hidden) {
+        this.field.flagged = !this.field.flagged
+      }
+      // show fields around mine for revealed with and flagged neighbours
+      this.$store.commit('tryRevealAround', { x: this.x, y: this.y })
     }
   },
   created () {
@@ -61,38 +80,35 @@ export default {
 TODO: responsive sizes
  */
 .field-container {
-  padding: 1px;
   display: flex;
   justify-content: center;
   align-items: center;
   background: #d5dce8;
   /* testing */
-  width: 50px;
-  height: 50px;
+  width: 29px;
+  height: 29px;
 
   font-weight: bold;
   font-family: monospace;
-  border-style: solid;
-  border-width: 3px;
+  border: 2px solid #b7bdc7;
+  /* border-style: solid;
+  border-width: 2px;
   border-top-color: #b7bdc7;
   border-left-color: #b7bdc7;
   border-right: none;
-  border-bottom: none;
+  border-bottom: none; */
 }
 
 .last-row {
-  border-bottom: 3px solid #b7bdc7;
+  border-bottom: 2px solid #b7bdc7;
 }
 .last-column {
-  border-right: 3px solid #b7bdc7;
+  border-right: 2px solid #b7bdc7;
 }
-.field-container-inner {
-  width: 100%;
-  height: 100%;
-}
+
 .hidden {
   border-style: solid;
-  border-width: 4px;
+  border-width: 2px;
   border-top-color: #b7bdc7;
   border-left-color: #b7bdc7;
   border-right-color: #000a1c;

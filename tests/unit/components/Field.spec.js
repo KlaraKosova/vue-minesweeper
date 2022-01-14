@@ -109,87 +109,32 @@ describe('Field', () => {
     expect(mutations.showField).not.toHaveBeenCalled()
   })
 
-  it('renders with class "last-column" when in last column', () => {
+  it('does not trigger "showField" mutation on click when has flag', async () => {
+    const mutations = {
+      showField: jest.fn()
+    }
     const store = new Vuex.Store({
+      mutations,
       getters: {
-        field: () => () => new Field({ x: 0, y: 19 }),
-        matrixDimensions: () => ({
-          rows: 15,
-          columns: 20
-        })
+        field: () => () => {
+          const field = new Field({ x: 1, y: 1 })
+          field.flagged = true
+          return field
+        },
+        matrixDimensions: () => ({})
       }
     })
     const wrapper = mount(FieldComponent, {
       localVue,
       store,
       propsData: {
-        x: 0,
-        y: 19
+        x: 1,
+        y: 1
       }
     })
-    expect(wrapper.classes()).toContain('last-column')
-  })
 
-  it('does not render with class "last-column" when not in last column', () => {
-    const store = new Vuex.Store({
-      getters: {
-        field: () => () => new Field({ x: 0, y: 19 }),
-        matrixDimensions: () => ({
-          rows: 15,
-          columns: 21
-        })
-      }
-    })
-    const wrapper = mount(FieldComponent, {
-      localVue,
-      store,
-      propsData: {
-        x: 0,
-        y: 19
-      }
-    })
-    expect(wrapper.classes()).not.toContain('last-column')
-  })
-
-  it('renders with class "last-row" when in last row', () => {
-    const store = new Vuex.Store({
-      getters: {
-        field: () => () => new Field({ x: 14, y: 10 }),
-        matrixDimensions: () => ({
-          rows: 15,
-          columns: 20
-        })
-      }
-    })
-    const wrapper = mount(FieldComponent, {
-      localVue,
-      store,
-      propsData: {
-        x: 14,
-        y: 19
-      }
-    })
-    expect(wrapper.classes()).toContain('last-row')
-  })
-
-  it('does not render with class "last-row" when not in last row', () => {
-    const store = new Vuex.Store({
-      getters: {
-        field: () => () => new Field({ x: 0, y: 19 }),
-        matrixDimensions: () => ({
-          rows: 15,
-          columns: 21
-        })
-      }
-    })
-    const wrapper = mount(FieldComponent, {
-      localVue,
-      store,
-      propsData: {
-        x: 0,
-        y: 19
-      }
-    })
-    expect(wrapper.classes()).not.toContain('last-row')
+    const fieldContainer = wrapper.find('.field-container')
+    await fieldContainer.trigger('click')
+    expect(mutations.showField).not.toHaveBeenCalled()
   })
 })

@@ -26,5 +26,17 @@ export const mutations = {
    */
   showField (state, { x, y }) {
     state.matrix.showField({ x, y })
+  },
+
+  /**
+   * Propagates to matrix
+   * @param {VuexState} state
+   * @param {Object} coordinates
+   * @param {Number} coordinates.x
+   * @param {Number} coordinates.y
+   * @return {void}
+   */
+  tryRevealAround (state, { x, y }) {
+    state.matrix.tryRevealAround({ x, y })
   }
 }
