@@ -24,6 +24,7 @@
 import { Mine } from '../Entities/Mine'
 import MineSVG from './MineSVG'
 import FlagSVG from './FlagSVG'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'Field',
@@ -46,27 +47,32 @@ export default {
   computed: {
     displaysMineIcon () {
       return this.field instanceof Mine
-    }
+    },
+    ...mapGetters({
+      isEveryMineLocated: 'isEveryMineLocated'
+    })
   },
   methods: {
     handleRightClick () {
       // reveal field if hidden and doesn't have flag
       if (this.field.hidden && !this.field.flagged) {
         this.$store.commit('showField', { x: this.x, y: this.y })
-        return
+        this.$store.commit('recalculateState')
       }
       if (!this.field.hidden) {
         // show fields around mine for revealed with and flagged neighbours
         this.$store.commit('tryRevealAround', { x: this.x, y: this.y })
+        this.$store.commit('recalculateState')
       }
     },
     handleLeftClick () {
       // toggle flag for hidden fields
       if (this.field.hidden) {
         this.field.flagged = !this.field.flagged
+        this.$store.commit('recalculateState')
       }
       // show fields around mine for revealed with and flagged neighbours
-      this.$store.commit('tryRevealAround', { x: this.x, y: this.y })
+      // this.$store.commit('tryRevealAround', { x: this.x, y: this.y })
     }
   },
   created () {

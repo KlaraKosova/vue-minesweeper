@@ -137,13 +137,29 @@ export class Matrix {
     // then look around found for each of that fields
     // if clicked on non-empty field, the loop ends after one iteration
 
-    // stack for keeping fields that have been found, but not inspected for potential neighbouring EmptyFields
+    // queue for keeping fields that have been found, but not inspected for potential neighbouring EmptyFields
     const found = []
     // store for fields that have been inspected
     const processed = []
-    // conditional pushing to the found stack
+    // function for conditional pushing to the found queue
+    // field is pushed to the found queue if:
+    //    - it is not in the found queue
+    //    - it is not in the processed array
+    //    - it is hidden (edge fields could have been discovered with previous clicks)
     function process (field) {
-      if (!processed.includes(field)) {
+      const searchByCoordinatesFunc = processedField => {
+        if (processedField.getCoordinates().x !== field.getCoordinates().x) {
+          return false
+        }
+        if (processedField.getCoordinates().y !== field.getCoordinates().y) {
+          return false
+        }
+        return true
+      }
+      const includedInProcessed = !!processed.find(searchByCoordinatesFunc)
+      const includedInFound = !!found.find(searchByCoordinatesFunc)
+
+      if (!includedInFound && !includedInProcessed && field.hidden) {
         found.push(field)
       }
     }
@@ -151,7 +167,7 @@ export class Matrix {
     found.push(this.#matrix[x][y])
 
     while (found.length) {
-      const current = found.pop()
+      const current = found.shift()
       const coordinates = current.getCoordinates()
       current.show()
       processed.push(current)
@@ -309,6 +325,29 @@ export class Matrix {
       process(right)
     }
   }
+
+  /**
+   * Returns true if user located every mine (put flag on it)
+   * i.e. matrix rows * matrix columns == revealed fields + fields with flags
+   * @return {Boolean}
+   */
+  /* everyMineLocated () {
+    let flagsSum = 0
+    let revealedSum = 0
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.columns; j++) {
+        if (this.#matrix[i][j].flagged) {
+          flagsSum++
+        }
+        if (!this.#matrix[i][j].hidden) {
+          revealedSum++
+        }
+      }
+    }
+    console.log('rev', revealedSum)
+    console.log('flag', flagsSum)
+    return this.rows * this.columns === flagsSum + revealedSum
+  } */
 
   /**
    * Returns the matrix in string format

@@ -38,5 +38,32 @@ export const mutations = {
    */
   tryRevealAround (state, { x, y }) {
     state.matrix.tryRevealAround({ x, y })
+  },
+
+  /**
+   * Forces vuex to recalculate number of revealed fields and fields with flags
+   *
+   * @param state
+   * @return {void}
+   */
+  recalculateState (state) {
+    console.log('here')
+    let flagsSum = 0
+    let revealedSum = 0
+    for (let i = 0; i < state.matrix.rows; i++) {
+      for (let j = 0; j < state.matrix.columns; j++) {
+        const field = state.matrix.getFieldByCoordinates({ x: i, y: j })
+        if (field.flagged) {
+          flagsSum++
+        }
+        if (!field.hidden) {
+          revealedSum++
+        }
+      }
+    }
+
+    state.revealedSum = revealedSum
+    state.flagsSum = flagsSum
   }
+
 }

@@ -11,7 +11,9 @@ export const store = new Vuex.Store({
    * }} VuexState
    */
   state: {
-    matrix: {}
+    matrix: {},
+    revealedSum: 0,
+    flagsSum: 0
   },
   getters,
   mutations

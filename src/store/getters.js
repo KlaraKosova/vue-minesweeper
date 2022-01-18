@@ -12,5 +12,14 @@ export const getters = {
    */
   matrixDimensions (state) {
     return { rows: state.matrix.rows, columns: state.matrix.columns }
+  },
+  /**
+   * @see Entities/Matrix/everyMineLocated
+   * @return {Boolean}
+   */
+  isEveryMineLocated (state) {
+    console.log('rev', state.revealedSum)
+    console.log('flag', state.flagsSum)
+    return state.matrix.rows * state.matrix.columns === state.flagsSum + state.revealedSum
   }
 }
