@@ -18,8 +18,6 @@ export const getters = {
    * @return {Boolean}
    */
   isEveryMineLocated (state) {
-    console.log('rev', state.revealedSum)
-    console.log('flag', state.flagsSum)
     return state.matrix.rows * state.matrix.columns === state.flagsSum + state.revealedSum
   }
 }

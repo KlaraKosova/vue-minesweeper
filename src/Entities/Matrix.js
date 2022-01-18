@@ -1,6 +1,7 @@
 import { EmptyField } from './EmptyField'
 import { Mine } from './Mine'
 import { NumberField } from './NumberField'
+import { ClickedOnMineError } from './ClickedOnMineError'
 
 export class Matrix {
   rows;
@@ -172,6 +173,9 @@ export class Matrix {
       current.show()
       processed.push(current)
 
+      if (current instanceof Mine) {
+        throw new ClickedOnMineError({ x: coordinates.x, y: coordinates.y })
+      }
       // looking around only EmptyFields
       if (!(current instanceof EmptyField)) {
         continue

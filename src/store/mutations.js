@@ -1,4 +1,5 @@
 import { Matrix } from '../Entities/Matrix'
+import { ClickedOnMineError } from '../Entities/ClickedOnMineError'
 
 export const mutations = {
   /**
@@ -25,7 +26,13 @@ export const mutations = {
    * @return {void}
    */
   showField (state, { x, y }) {
-    state.matrix.showField({ x, y })
+    try {
+      state.matrix.showField({ x, y })
+    } catch (error) {
+      if (error instanceof ClickedOnMineError) {
+        console.log('asdf')
+      }
+    }
   },
 
   /**
@@ -37,7 +44,13 @@ export const mutations = {
    * @return {void}
    */
   tryRevealAround (state, { x, y }) {
-    state.matrix.tryRevealAround({ x, y })
+    try {
+      state.matrix.tryRevealAround({ x, y })
+    } catch (error) {
+      if (error instanceof ClickedOnMineError) {
+        console.log('asdf')
+      }
+    }
   },
 
   /**
@@ -47,7 +60,6 @@ export const mutations = {
    * @return {void}
    */
   recalculateState (state) {
-    console.log('here')
     let flagsSum = 0
     let revealedSum = 0
     for (let i = 0; i < state.matrix.rows; i++) {
