@@ -15,6 +15,12 @@ export const mutations = {
     // reset matrix
     state.matrix = new Matrix(rows, columns)
     state.matrix.generateMines(mines)
+    state.gameState.loss = false
+    state.gameState.win = false
+    state.gameState.lossInitiatorCoordinates = {
+      x: null,
+      y: null
+    }
   },
 
   /**
@@ -30,7 +36,9 @@ export const mutations = {
       state.matrix.showField({ x, y })
     } catch (error) {
       if (error instanceof ClickedOnMineError) {
-        console.log('asdf')
+        state.gameState.win = false
+        state.gameState.loss = true
+        state.gameState.lossInitiatorCoordinates = error.coordinates
       }
     }
   },
@@ -48,7 +56,9 @@ export const mutations = {
       state.matrix.tryRevealAround({ x, y })
     } catch (error) {
       if (error instanceof ClickedOnMineError) {
-        console.log('asdf')
+        state.gameState.win = false
+        state.gameState.loss = true
+        state.gameState.lossInitiatorCoordinates = error.coordinates
       }
     }
   },
@@ -74,8 +84,12 @@ export const mutations = {
       }
     }
 
-    state.revealedSum = revealedSum
-    state.flagsSum = flagsSum
+    if (revealedSum + flagsSum === state.matrix.rows * state.matrix.columns && flagsSum === state.gameSettings.mines) {
+      state.gameState.win = true
+      state.gameState.loss = false
+    }
+    state.gameState.revealedSum = revealedSum
+    state.gameState.flagsSum = flagsSum
   }
 
 }

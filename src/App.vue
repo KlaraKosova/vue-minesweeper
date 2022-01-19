@@ -14,9 +14,6 @@ export default {
   components: {
     FieldContainer,
     Navbar
-  },
-  created () {
-    this.$store.commit('generateMatrix', { rows: 10, columns: 10, mines: 20 })
   }
 }
 </script>
@@ -28,8 +25,24 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
   user-select: none;
   -moz-user-select: none;
+}
+html {
+  width: 100%;
+  height: 100%;
+  background-color: #b7bdc7;
+}
+body {
+  margin: 0;
+  width: 99%;
+  height: 98%;
+  border-style: solid;
+  border-width: 10px;
+  border-top-color: #b7bdc7;
+  border-left-color: #b7bdc7;
+  border-right-color: #000a1c;
+  border-bottom-color: #000a1c;
+
 }
 </style>

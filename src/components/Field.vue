@@ -1,7 +1,8 @@
 <template>
 <div
     class="field-container"
-    :class="{'hidden': field.hidden}"
+    :class="{'hidden': field.hidden,
+      'loss-initiator': isLossInitiator}"
     @click="handleRightClick"
     @contextmenu.prevent="handleLeftClick"
 >
@@ -9,7 +10,9 @@
       v-if="!field.hidden"
       :class="`number-field-${field.value}`"
   >
-    <template v-if="displaysMineIcon">
+    <template
+        v-if="displaysMineIcon"
+    >
       <MineSVG />
     </template>
     <template v-else>
@@ -24,7 +27,6 @@
 import { Mine } from '../Entities/Mine'
 import MineSVG from './MineSVG'
 import FlagSVG from './FlagSVG'
-import { mapGetters } from 'vuex'
 
 export default {
   name: 'Field',
@@ -48,12 +50,17 @@ export default {
     displaysMineIcon () {
       return this.field instanceof Mine
     },
-    ...mapGetters({
-      isEveryMineLocated: 'isEveryMineLocated'
-    })
+    isLossInitiator () {
+      return this.x === this.$store.state.gameState.lossInitiatorCoordinates.x &&
+          this.y === this.$store.state.gameState.lossInitiatorCoordinates.y
+    }
   },
   methods: {
     handleRightClick () {
+      // take action only if game is not neither in win nor loss state
+      if (this.$store.state.gameState.win || this.$store.state.gameState.loss) {
+        return
+      }
       // reveal field if hidden and doesn't have flag
       if (this.field.hidden && !this.field.flagged) {
         this.$store.commit('showField', { x: this.x, y: this.y })
@@ -66,6 +73,10 @@ export default {
       }
     },
     handleLeftClick () {
+      // take action only if game is not neither in win nor loss state
+      if (this.$store.state.gameState.win || this.$store.state.gameState.loss) {
+        return
+      }
       // toggle flag for hidden fields
       if (this.field.hidden) {
         this.field.flagged = !this.field.flagged
@@ -149,5 +160,8 @@ TODO: responsive sizes
 }
 .number-field-8 {
   color: #D01919;
+}
+.loss-initiator {
+  background-color: #fa290f;
 }
 </style>

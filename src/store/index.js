@@ -13,7 +13,23 @@ export const store = new Vuex.Store({
   state: {
     matrix: {},
     revealedSum: 0,
-    flagsSum: 0
+    flagsSum: 0,
+    gameState: {
+      generatingMatrix: false,
+      revealedSum: 0,
+      flagsSum: 0,
+      win: false,
+      loss: false,
+      lossInitiatorCoordinates: {
+        x: null,
+        y: null
+      }
+    },
+    gameSettings: {
+      rows: 10,
+      columns: 10,
+      mines: 20
+    }
   },
   getters,
   mutations
