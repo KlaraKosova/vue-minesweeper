@@ -331,6 +331,20 @@ export class Matrix {
   }
 
   /**
+   * Sets hidden = false to all mines in the matrix
+   * @return {void}
+   */
+  showAllMines () {
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.columns; j++) {
+        if (this.#matrix[i][j] instanceof Mine) {
+          this.#matrix[i][j].hidden = false
+        }
+      }
+    }
+  }
+
+  /**
    * Returns true if user located every mine (put flag on it)
    * i.e. matrix rows * matrix columns == revealed fields + fields with flags
    * @return {Boolean}

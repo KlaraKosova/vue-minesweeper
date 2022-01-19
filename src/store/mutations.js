@@ -39,6 +39,7 @@ export const mutations = {
         state.gameState.win = false
         state.gameState.loss = true
         state.gameState.lossInitiatorCoordinates = error.coordinates
+        state.matrix.showAllMines()
       }
     }
   },
@@ -59,6 +60,7 @@ export const mutations = {
         state.gameState.win = false
         state.gameState.loss = true
         state.gameState.lossInitiatorCoordinates = error.coordinates
+        state.matrix.showAllMines()
       }
     }
   },

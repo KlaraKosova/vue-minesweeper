@@ -31,7 +31,7 @@ export default {
 html {
   width: 100%;
   height: 100%;
-  background-color: #b7bdc7;
+  background-color: #93979e;
 }
 body {
   margin: 0;
@@ -40,7 +40,7 @@ body {
   border-style: solid;
   border-width: 10px;
   border-top-color: #b7bdc7;
-  border-left-color: #b7bdc7;
+  border-left-color: #93979e;
   border-right-color: #000a1c;
   border-bottom-color: #000a1c;
 
