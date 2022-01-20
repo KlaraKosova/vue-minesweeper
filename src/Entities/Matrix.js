@@ -44,8 +44,10 @@ export class Matrix {
 
     // create instances of mines and store them in the matrix
     mineSequences.forEach((sequence) => {
-      const row = Math.floor(sequence / this.rows)
-      const col = sequence % this.rows
+      const row = Math.floor(sequence / this.columns)
+      const col = sequence % this.columns
+      // console.log(`seq ${sequence} row ${row} col ${col}`)
+      // console.log(this.#matrix)
       this.#matrix[row][col] = new Mine({ x: row, y: col })
 
       // TODO: refactor

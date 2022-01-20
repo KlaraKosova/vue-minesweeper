@@ -27,6 +27,8 @@ export default {
   color: #2c3e50;
   user-select: none;
   -moz-user-select: none;
+  width: 100%;
+  height: 100%;
 }
 html {
   width: 100%;
