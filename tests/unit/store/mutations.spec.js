@@ -2,9 +2,10 @@ import { mutations } from '@/store/mutations'
 import { Matrix } from '@/Entities/Matrix'
 
 describe('mutations', () => {
-  it('generateMatrix', () => {
+  it('generateMatrix for square matrix', () => {
     const state = {
-      matrix: {}
+      matrix: {},
+      gameState: {}
     }
     mutations.generateMatrix(state, { rows: 10, columns: 10, mines: 10 })
 
@@ -14,9 +15,36 @@ describe('mutations', () => {
     expect(stringified.split('x').length).toBe(11)
     console.log(stringified)
   })
+
+  it('generateMatrix for rows > columns', () => {
+    const state = {
+      matrix: {},
+      gameState: {}
+    }
+    mutations.generateMatrix(state, { rows: 20, columns: 10, mines: 10 })
+
+    const stringified = state.matrix.getStringifiedMatrix()
+    expect(state.matrix).toBeInstanceOf(Matrix)
+    // if we split stringified matrix by 'x' (mines), we must get number of mines + 1
+    expect(stringified.split('x').length).toBe(11)
+  })
+  it('generateMatrix for rows < columns', () => {
+    const state = {
+      matrix: {},
+      gameState: {}
+    }
+    mutations.generateMatrix(state, { rows: 10, columns: 20, mines: 10 })
+
+    const stringified = state.matrix.getStringifiedMatrix()
+    expect(state.matrix).toBeInstanceOf(Matrix)
+    // if we split stringified matrix by 'x' (mines), we must get number of mines + 1
+    expect(stringified.split('x').length).toBe(11)
+  })
+
   it('"showField" for NumberFields (value "1")', () => {
     const state = {
-      matrix: {}
+      matrix: {},
+      gameState: {}
     }
     // generates testing matrix
     mutations.generateMatrix(state, { rows: 10, columns: 10, mines: 1 })

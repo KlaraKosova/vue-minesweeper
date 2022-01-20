@@ -7,15 +7,24 @@ import { NumberField } from '@/Entities/NumberField'
 describe('Field', () => {
   const localVue = createLocalVue()
   localVue.use(Vuex)
+  let wrapper
+  afterAll(() => {
+    wrapper.destroy()
+  })
 
   it('renders as hidden', () => {
     const store = new Vuex.Store({
+      state: {
+        gameState: {
+          lossInitiatorCoordinates: {}
+        }
+      },
       getters: {
         field: () => () => new Field({ x: 0, y: 0 }),
         matrixDimensions: () => ({})
       }
     })
-    const wrapper = mount(FieldComponent, {
+    wrapper = mount(FieldComponent, {
       localVue,
       store,
       propsData: {
@@ -31,6 +40,11 @@ describe('Field', () => {
 
   it('renders as value 1', () => {
     const store = new Vuex.Store({
+      state: {
+        gameState: {
+          lossInitiatorCoordinates: {}
+        }
+      },
       getters: {
         field: () => () => {
           const numberField = new NumberField({ x: 0, y: 0 })
@@ -40,7 +54,7 @@ describe('Field', () => {
         matrixDimensions: () => ({})
       }
     })
-    const wrapper = mount(FieldComponent, {
+    wrapper = mount(FieldComponent, {
       localVue,
       store,
       propsData: {
@@ -60,12 +74,17 @@ describe('Field', () => {
     }
     const store = new Vuex.Store({
       mutations,
+      state: {
+        gameState: {
+          lossInitiatorCoordinates: {}
+        }
+      },
       getters: {
         field: () => () => new Field({ x: 1, y: 1 }),
         matrixDimensions: () => ({})
       }
     })
-    const wrapper = mount(FieldComponent, {
+    wrapper = mount(FieldComponent, {
       localVue,
       store,
       propsData: {
@@ -77,7 +96,7 @@ describe('Field', () => {
     const fieldContainer = wrapper.find('.field-container')
     await fieldContainer.trigger('click')
     expect(mutations.showField).toHaveBeenCalled()
-    expect(mutations.showField).toHaveBeenCalledWith(/* not mocked store */{}, expect.objectContaining({ x: 1, y: 1 }))
+    expect(mutations.showField).toHaveBeenCalledWith(/* not mocked store */store, expect.objectContaining({ x: 1, y: 1 }))
   })
 
   it('does not trigger "showField" mutation on click when not hidden', async () => {
@@ -86,6 +105,11 @@ describe('Field', () => {
     }
     const store = new Vuex.Store({
       mutations,
+      state: {
+        gameState: {
+          lossInitiatorCoordinates: {}
+        }
+      },
       getters: {
         field: () => () => {
           const field = new Field({ x: 1, y: 1 })
@@ -95,7 +119,7 @@ describe('Field', () => {
         matrixDimensions: () => ({})
       }
     })
-    const wrapper = mount(FieldComponent, {
+    wrapper = mount(FieldComponent, {
       localVue,
       store,
       propsData: {
@@ -115,6 +139,11 @@ describe('Field', () => {
     }
     const store = new Vuex.Store({
       mutations,
+      state: {
+        gameState: {
+          lossInitiatorCoordinates: {}
+        }
+      },
       getters: {
         field: () => () => {
           const field = new Field({ x: 1, y: 1 })
@@ -124,7 +153,7 @@ describe('Field', () => {
         matrixDimensions: () => ({})
       }
     })
-    const wrapper = mount(FieldComponent, {
+    wrapper = mount(FieldComponent, {
       localVue,
       store,
       propsData: {
@@ -136,5 +165,32 @@ describe('Field', () => {
     const fieldContainer = wrapper.find('.field-container')
     await fieldContainer.trigger('click')
     expect(mutations.showField).not.toHaveBeenCalled()
+  })
+
+  it('has class loss-initiator when set in vuex', () => {
+    const store = new Vuex.Store({
+      state: {
+        gameState: {
+          lossInitiatorCoordinates: {
+            x: 1,
+            y: 1
+          }
+        }
+      },
+      getters: {
+        field: () => () => new Field({ x: 1, y: 1 }),
+        matrixDimensions: () => ({})
+      }
+    })
+    wrapper = mount(FieldComponent, {
+      localVue,
+      store,
+      propsData: {
+        x: 1,
+        y: 1
+      }
+    })
+
+    expect(wrapper.classes()).toContain('loss-initiator')
   })
 })

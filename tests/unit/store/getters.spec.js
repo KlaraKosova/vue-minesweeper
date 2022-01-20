@@ -5,7 +5,8 @@ import { EmptyField } from '@/Entities/EmptyField'
 describe('getters', () => {
   it('field', () => {
     const state = {
-      matrix: {}
+      matrix: {},
+      gameState: {}
     }
     // generate matrix for testing
     mutations.generateMatrix(state, { rows: 10, columns: 10, mines: 10 })
@@ -31,7 +32,8 @@ describe('getters', () => {
   })
   it('matrixDimensions', () => {
     const state = {
-      matrix: {}
+      matrix: {},
+      gameState: {}
     }
     // generate matrix for testing
     mutations.generateMatrix(state, { rows: 15, columns: 10, mines: 10 })

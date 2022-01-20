@@ -64,11 +64,13 @@ export default {
       // reveal field if hidden and doesn't have flag
       if (this.field.hidden && !this.field.flagged) {
         this.$store.commit('showField', { x: this.x, y: this.y })
+        // force recalculation
         this.$store.commit('recalculateState')
       }
       if (!this.field.hidden) {
-        // show fields around mine for revealed with and flagged neighbours
+        // show fields around mine if value of field is equal to the number of neighbours with flags
         this.$store.commit('tryRevealAround', { x: this.x, y: this.y })
+        // force recalculation
         this.$store.commit('recalculateState')
       }
     },
@@ -82,8 +84,6 @@ export default {
         this.field.flagged = !this.field.flagged
         this.$store.commit('recalculateState')
       }
-      // show fields around mine for revealed with and flagged neighbours
-      // this.$store.commit('tryRevealAround', { x: this.x, y: this.y })
     }
   },
   created () {
@@ -101,26 +101,12 @@ TODO: responsive sizes
   justify-content: center;
   align-items: center;
   background: #d5dce8;
-  /* testing */
   width: 29px;
   height: 29px;
 
   font-weight: bold;
   font-family: monospace;
   border: 2px solid #b7bdc7;
-  /* border-style: solid;
-  border-width: 2px;
-  border-top-color: #b7bdc7;
-  border-left-color: #b7bdc7;
-  border-right: none;
-  border-bottom: none; */
-}
-
-.last-row {
-  border-bottom: 2px solid #b7bdc7;
-}
-.last-column {
-  border-right: 2px solid #b7bdc7;
 }
 
 .hidden {
@@ -131,7 +117,6 @@ TODO: responsive sizes
   border-right-color: #000a1c;
   border-bottom-color: #000a1c;
   background-color:  #1f2c40;
-  /* border: 4px outset #bfbfbf; */
 }
 
 .hidden:hover {

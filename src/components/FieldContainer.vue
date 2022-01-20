@@ -19,6 +19,7 @@ export default {
     }
   },
   created () {
+    // force rerender
     eventBus.$on('new-game', () => {
       this.fieldRerender = false
       this.$nextTick(() => {

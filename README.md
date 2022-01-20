@@ -1,24 +1,22 @@
 # minesweeper
+Simple minesweeper game built with Vue.js 2
 
-## Project setup
+Intended only as practice project
+
+
+
+#### Setup
 ```
 npm install
 ```
 
-### Compiles and hot-reloads for development
+#### Compiling and hot-reloads for development
 ```
 npm run serve
 ```
 
-### Compiles and minifies for production
+#### Running unit tests
 ```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
+npm run test:unit
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).

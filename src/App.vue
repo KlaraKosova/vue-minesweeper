@@ -37,8 +37,8 @@ html {
 }
 body {
   margin: 0;
-  width: 99%;
-  height: 98%;
+  min-width: 99%;
+  min-height: 98%;
   border-style: solid;
   border-width: 10px;
   border-top-color: #b7bdc7;

@@ -20,6 +20,7 @@ export const store = new Vuex.Store({
       flagsSum: 0,
       win: false,
       loss: false,
+      // coordinates of the mine that user clicked on
       lossInitiatorCoordinates: {
         x: null,
         y: null

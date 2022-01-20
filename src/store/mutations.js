@@ -67,7 +67,6 @@ export const mutations = {
 
   /**
    * Forces vuex to recalculate number of revealed fields and fields with flags
-   *
    * @param state
    * @return {void}
    */
@@ -86,6 +85,7 @@ export const mutations = {
       }
     }
 
+    // user won every mine has flag on it and the rest of fields are revealed
     if (revealedSum + flagsSum === state.matrix.rows * state.matrix.columns && flagsSum === state.gameSettings.mines) {
       state.gameState.win = true
       state.gameState.loss = false

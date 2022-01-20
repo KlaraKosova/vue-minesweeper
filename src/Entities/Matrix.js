@@ -46,8 +46,6 @@ export class Matrix {
     mineSequences.forEach((sequence) => {
       const row = Math.floor(sequence / this.columns)
       const col = sequence % this.columns
-      // console.log(`seq ${sequence} row ${row} col ${col}`)
-      // console.log(this.#matrix)
       this.#matrix[row][col] = new Mine({ x: row, y: col })
 
       // TODO: refactor
@@ -345,29 +343,6 @@ export class Matrix {
       }
     }
   }
-
-  /**
-   * Returns true if user located every mine (put flag on it)
-   * i.e. matrix rows * matrix columns == revealed fields + fields with flags
-   * @return {Boolean}
-   */
-  /* everyMineLocated () {
-    let flagsSum = 0
-    let revealedSum = 0
-    for (let i = 0; i < this.rows; i++) {
-      for (let j = 0; j < this.columns; j++) {
-        if (this.#matrix[i][j].flagged) {
-          flagsSum++
-        }
-        if (!this.#matrix[i][j].hidden) {
-          revealedSum++
-        }
-      }
-    }
-    console.log('rev', revealedSum)
-    console.log('flag', flagsSum)
-    return this.rows * this.columns === flagsSum + revealedSum
-  } */
 
   /**
    * Returns the matrix in string format
